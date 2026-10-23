@@ -1,0 +1,51 @@
+@import "../../variables";
+
+// Pagefind's components reset inherited styles on themselves, so these custom
+// properties are the whole theming surface. They are declared on the elements
+// rather than on :root because Pagefind's own stylesheet, which loads later,
+// redeclares its defaults on :root; a value set on the element itself wins over
+// anything inherited, whatever the order.
+pagefind-modal,
+pagefind-modal-trigger {
+  --pf-text: #{$fg_0};
+  --pf-text-secondary: #{$dim_0};
+  --pf-text-muted: #{$dim_0};
+  --pf-background: #{$bg_0};
+  --pf-border: #{$bg_2};
+  --pf-border-focus: #{$dim_0};
+  --pf-hover: #{$bg_1};
+  --pf-skeleton: #{$bg_2};
+  --pf-skeleton-shine: #{$bg_1};
+  --pf-mark: #{$fg_1};
+  --pf-outline-focus: #{$blue};
+  --pf-error-bg: #{$bg_1};
+  --pf-error-border: #{$bg_2};
+  --pf-error-text: #{$red};
+  --pf-error-text-secondary: #{$br_red};
+  --pf-font: #{$BodyFont};
+  --pf-border-radius: 8px;
+  --pf-input-height: 4.2rem;
+  --pf-input-font-size: 1.8rem;
+
+  // The page's own measure, so a result reads at the width of the prose it came
+  // from, and Pagefind's default type, sized for a 16px page, scales with it.
+  --pf-modal-max-width: #{$column-width};
+  --pf-result-title-font-size: 1.7rem;
+  --pf-result-excerpt-font-size: 1.4rem;
+  --pf-summary-font-size: 1.3rem;
+  --pf-modal-backdrop: rgba(0, 0, 0, 0.4);
+}
+
+// Pagefind renders the modal as a real <dialog>, so the page behind it is
+// dimmed by ::backdrop. Pagefind sets the color there and nothing else, which
+// leaves the blur to us.
+dialog.pf-modal::backdrop {
+  backdrop-filter: blur(0.25rem);
+}
+
+// Pagefind stops the page behind the modal from scrolling with overflow on the
+// backdrop, which only Chromium honours so far, so the lock is repeated here in
+// a form every engine applies.
+html:has(pagefind-modal dialog[open]) {
+  overflow: hidden;
+}

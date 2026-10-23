@@ -1,0 +1,18 @@
+.zola-anchor {
+    font-size: 75%;
+    visibility: hidden;
+    color: $gold; // silver;
+    &:hover {
+      color: $gold;
+    }
+    margin-left: 0.5em; 
+}
+
+h1:hover a,
+h2:hover a,
+h3:hover a,
+h4:hover a,
+h5:hover a,
+h6:hover a {
+    visibility: visible;
+}
