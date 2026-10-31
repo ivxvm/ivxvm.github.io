@@ -80,7 +80,7 @@ This blogpost barely scratches the surface, but I believe those aspects I covere
 ## Useful scripts
 
 ```sh
-# print fragmentation for all files in folder (descending into subfolders recursively)
+# print fragmentation for all files in folder (recursively)
 find /mnt/expansion/videos -type f -exec filefrag {} +
 ```
 
