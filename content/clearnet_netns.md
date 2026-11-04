@@ -87,7 +87,6 @@ sudo -E ip netns exec vps-ns runuser -u ivxvm -- flatpak run org.qbittorrent.qBi
 
 However this requires sudo which doesn't work well with usual userspace infrastructure like KDE autostarts and application launchers. It's possible to have a wrapper that works without sudo, but the setup is a bit more involved:
 
-> /usr/local/libexec/clearnet-exec
 ```sh
 #!/bin/sh
 [ -n "$SUDO_USER" ] && [ "$SUDO_USER" != root ] || { echo "run via sudo as a normal user" >&2; exit 1; }
@@ -95,18 +94,22 @@ However this requires sudo which doesn't work well with usual userspace infrastr
 HOME_DIR=$(getent passwd "$SUDO_USER" | cut -d: -f6)
 exec ip netns exec clearnet runuser -u "$SUDO_USER" -- \
   env HOME="$HOME_DIR" USER="$SUDO_USER" LOGNAME="$SUDO_USER" "$@"
+
+## ^ /usr/local/libexec/clearnet-exec
 ```
 
-> /etc/sudoers.d/clearnet
 ```sh
 Defaults!/usr/local/libexec/clearnet-exec env_keep+="DISPLAY WAYLAND_DISPLAY XAUTHORITY XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS"
 ivxvm ALL=(root) NOPASSWD: /usr/local/libexec/clearnet-exec
+
+## ^ /etc/sudoers.d/clearnet
 ```
 
-> ~/bin/clearnet
 ```sh
 #!/bin/sh
 exec sudo /usr/local/libexec/clearnet-exec "$@"
+
+## ^ ~/bin/clearnet
 ```
 
 With setup above you can do things like this, and you can put it into application launchers and autostarts:
@@ -144,7 +147,6 @@ I'll only cover Firefox here, but it's possible that similar technology exist fo
 Firefox has container tabs which make all cookies and other data isolated from other containers and from non-containerized tabs. With [Firefox Multi-Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) plugin developed by Firefox itself, it's also possible to configure proxy per container. This is exactly how I route specific tabs through clearnet. Inside of clearnet netns I run tinyproxy with the following config:
 
 ```sh
-# ~/.config/tinyproxy-clearnet.conf
 Port 4321
 Listen 10.200.0.2
 Allow 10.200.0.1
@@ -152,19 +154,24 @@ Timeout 600
 MaxClients 50
 PidFile "/tmp/tinyproxy-clearnet.pid"
 LogFile "/tmp/tinyproxy-clearnet.log"
+
+## ^ ~/.config/tinyproxy-clearnet.conf
 ```
 
 I start tinyproxy on boot by using KDE Plasma autostart entry, sleep is just a bit of safety net to make sure service or script setting up clearnet netns itself runs first, so that clearnet network namespace is already available:
 
 ```sh
-# KDE autostart entry
 # Program:
 sh
 # Arguments:
 -c 'sleep 5; /home/ivxvm/bin/clearnet tinyproxy -c /home/ivxvm/.config/tinyproxy-clearnet.conf'
 ```
 
-Then in Firefox in container proxy settings I set its IP and port as a proxy: http://10.200.0.2:4321
+Then in Firefox in container proxy settings I set its IP and port as a proxy: 
+```
+http://10.200.0.2:4321
+```
+
 # Further reading
 
 * [https://www.man7.org/linux/man-pages/man7/network_namespaces.7.html](https://www.man7.org/linux/man-pages/man7/network_namespaces.7.html)
