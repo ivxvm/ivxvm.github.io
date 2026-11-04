@@ -167,8 +167,8 @@ sh
 Then in Firefox in container proxy settings I set its IP and port as a proxy: http://10.200.0.2:4321
 # Further reading
 
-* https://www.man7.org/linux/man-pages/man7/network_namespaces.7.html
-* https://developers.redhat.com/articles/2026/04/03/introduction-to-linux-interfaces-for-virtual-networking
-* https://en.wikipedia.org/wiki/Nftables
-* https://support.mozilla.org/en-US/kb/how-use-firefox-containers
-* https://tinyproxy.github.io/
+* [https://www.man7.org/linux/man-pages/man7/network_namespaces.7.html](https://www.man7.org/linux/man-pages/man7/network_namespaces.7.html)
+* [https://developers.redhat.com/articles/2026/04/03/introduction-to-linux-interfaces-for-virtual-networking](https://developers.redhat.com/articles/2026/04/03/introduction-to-linux-interfaces-for-virtual-networking)
+* [https://en.wikipedia.org/wiki/Nftables](https://en.wikipedia.org/wiki/Nftables)
+* [https://support.mozilla.org/en-US/kb/how-use-firefox-containers](https://support.mozilla.org/en-US/kb/how-use-firefox-containers)
+* [https://tinyproxy.github.io](https://tinyproxy.github.io)
